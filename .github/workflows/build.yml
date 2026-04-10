@@ -20,7 +20,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-          cache: gradle
 
       - name: Install dependencies
         run: npm install
@@ -28,6 +27,9 @@ jobs:
       - name: Decode keystore
         run: |
           echo "${{ secrets.KEYSTORE }}" | base64 --decode > android/app/keystore.jks
+
+      - name: Verify Gradle wrapper
+        run: cat android/gradle/wrapper/gradle-wrapper.properties
 
       - name: Build release APK
         run: |
