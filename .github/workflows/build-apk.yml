@@ -1,63 +1,50 @@
-name: Build APK
+name: Build Android APK
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v4
-      
-      - name: Setup Node.js
+
+      - name: Setup Node 22
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-      
+          node-version: 22
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
       - name: Install dependencies
         run: npm install
-      
-      - name: Setup EAS
-        run: npm install -g eas-cli
-      
-      - name: Build APK with EAS
-        env:
-          EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
-        run: eas build --platform android --non-interactive
-      
-      - name: Upload APK to artifacts
-        if: success()
-        uses: actions/upload-artifact@v3
-        with:
-          name: forge-apk
-          path: '**/*.apk'
-          retention-days: 30
 
-      - name: Create Release
-        if: success()
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+
+      - name: Bundle JS
+        run: |
+          mkdir -p android/app/src/main/assets
+          npx react-native bundle \
+            --platform android \
+            --dev false \
+            --entry-file index.js \
+            --bundle-output android/app/src/main/assets/index.android.bundle \
+            --assets-dest android/app/src/main/res
+
+      - name: Build Debug APK
+        run: cd android && ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: v${{ github.run_number }}
-          release_name: Forge APK Build ${{ github.run_number }}
-          body: |
-            Automatic APK build from GitHub Actions
-            
-            **Build Details:**
-            - Commit: ${{ github.sha }}
-            - Branch: ${{ github.ref }}
-            - Run: ${{ github.run_number }}
-            
-            Download the APK from the artifacts or releases section.
-          draft: false
-          prerelease: false
+          name: forge-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
