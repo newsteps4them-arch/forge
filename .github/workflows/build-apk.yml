@@ -41,7 +41,9 @@ jobs:
             --assets-dest android/app/src/main/res
 
       - name: Build Debug APK
-        run: cd android && ./gradlew assembleDebug
+        run: |
+          export PATH=$PATH:$(pwd)/node_modules/.bin
+          cd android && ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
