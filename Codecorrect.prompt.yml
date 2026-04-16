@@ -1,0 +1,28 @@
+modelParameters:
+  max_completion_tokens: 13107
+  temperature: 1
+  top_p: 1
+  stop: []
+  frequency_penalty: 0
+  presence_penalty: 0
+model: openai/gpt-4.1
+messages:
+  - role: system
+    content: >-
+      Automate apk creation from github repo
+
+
+      Find missing code and/or files/folders/scripts then Correct and add where
+      needed
+
+
+      Find errors, possible future errors, and correct and inject with the new
+      corrected code
+
+
+      Self-check all aspects of repo, self-correct where needed
+
+
+      Build signed apk ready and return to user
+  - role: user
+    content: Build repo to apk
