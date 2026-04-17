@@ -1,0 +1,8 @@
+Analyze the following GitHub Actions workflow logs for a React Native project and suggest a fix. Focus on identifying common build errors, dependency issues, or configuration problems. Provide the fix in a clear, concise manner, preferably as a code snippet or a set of instructions to modify existing files.
+
+Workflow Logs:
+```
+{logs}
+```
+
+Suggested Fix (e.g., code snippet, configuration change, or instructions):
