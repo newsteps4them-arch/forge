@@ -9,10 +9,12 @@ jobs:
   analyze-and-correct:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'failure'
-    
+
     steps:
       - name: Checkout repo
-        uses: actions/checkout@ref: ${{ github.event.workflow_run.head_branch }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -27,19 +29,20 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const logs = await github.rest.actions.getWorkflowRunLogs({
+            const logs = await github.rest.actions.downloadWorkflowRunLogs({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }}
             });
-            fs.writeFileSync('workflow_logs.txt', logs.data);
+            fs.writeFileSync('workflow_logs.zip', Buffer.from(logs.data));
+
+      - name: Extract logs
+        run: unzip -o workflow_logs.zip -d logs_extracted
 
       - name: Run self-correcting agent
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          cd agents
-          python self_correcting_agent.py
+        run: python agents/self_correcting_agent.py
 
       - name: Create issue if correction needed
         uses: actions/github-script@v7
@@ -49,6 +52,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: '[AUTO] Build Failure Detected - Self-Correction Analysis',
-              body: 'The self-correcting agent has analyzed the failed build. Please review the logs and suggested fixes.',
+              body: 'The self-correcting agent has analyzed the failed build. Check logs and suggested fixes.',
               labels: ['bug', 'auto-generated']
             })
