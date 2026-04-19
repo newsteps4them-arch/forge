@@ -1,6 +1,17 @@
 apply plugin: 'com.android.application'
 
+
 android {
+    namespace "com.forge"
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.forge"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
     signingConfigs {
                 release {
             if (System.getenv('STORE_PASSWORD') != null) {
