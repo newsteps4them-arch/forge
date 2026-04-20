@@ -77,10 +77,10 @@ dependencies {
 }
 
 // Fix for the failing autolinking task
-tasks.whenTaskAdded { task ->
+tasks.configureEach { task ->
     if (task.name == "generateAutolinkingNewArchitectureFiles") {
         task.doFirst {
-            def outputDir = file("${project.buildDir}/generated/autolinking")
+            def outputDir = file("${project.layout.buildDirectory.get().asFile}/generated/autolinking")
             if (!outputDir.exists()) {
                 outputDir.mkdirs()
             }
