@@ -2,12 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.facebook.react'
 
 react {
-    /* No extra config needed for now */
 }
 
+def enableProguardInReleaseBuilds = false
+def jscFlavor = 'org.webkit:android-jsc:+'
+
 android {
-    namespace "com.forge"
+    ndkVersion "27.0.12077973"
+    buildToolsVersion "34.0.0"
     compileSdk 34
+    namespace "com.forge"
 
     defaultConfig {
         applicationId "com.forge"
@@ -17,12 +21,13 @@ android {
         versionName "1.0"
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
     signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
         release {
             if (System.getenv('STORE_PASSWORD') != null) {
                 storeFile file(System.getenv('KEYSTORE_FILE') ?: "debug.keystore")
@@ -36,58 +41,23 @@ android {
     }
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             signingConfig signingConfigs.release
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-
-// Force all libraries to match your project's versioning
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        if (details.requested.group == 'com.android.support') {
-            details.useVersion "28.0.0"
-        }
-    }
-}
-
-subprojects {
-    afterEvaluate { project ->
-        if (project.hasProperty('android')) {
-            project.android {
-                if (namespace == null) {
-                    namespace project.group ?: "com.forge.${project.name.replace("-", ".")}"
-                }
-            }
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
 }
 
 dependencies {
-    // The version of react-native is set by the react-native-community/cli
     implementation("com.facebook.react:react-android")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
-    }
-}
-
-// Fix for the failing autolinking task
-tasks.configureEach { task ->
-    if (task.name == "generateAutolinkingNewArchitectureFiles") {
-        task.doFirst {
-            def outputDir = file("${project.layout.buildDirectory.get().asFile}/generated/autolinking")
-            if (!outputDir.exists()) {
-                outputDir.mkdirs()
-            }
-            def outputFile = file("${outputDir}/autolinking.json")
-            if (!outputFile.exists()) {
-                outputFile.text = "{}"
-            }
-        }
     }
 }
