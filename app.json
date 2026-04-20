@@ -1,4 +1,7 @@
 {
   "name": "Forge",
-  "displayName": "Forge"
+  "displayName": "Forge",
+  "android": {
+    "package": "com.forge"
+  }
 }
