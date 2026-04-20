@@ -76,9 +76,18 @@ dependencies {
     }
 }
 
-// Disable the New Architecture autolinking task that is failing
+// Fix for the failing autolinking task
 tasks.whenTaskAdded { task ->
     if (task.name == "generateAutolinkingNewArchitectureFiles") {
-        task.enabled = false
+        task.doFirst {
+            def outputDir = file("${project.buildDir}/generated/autolinking")
+            if (!outputDir.exists()) {
+                outputDir.mkdirs()
+            }
+            def outputFile = file("${outputDir}/autolinking.json")
+            if (!outputFile.exists()) {
+                outputFile.text = "{}"
+            }
+        }
     }
 }
