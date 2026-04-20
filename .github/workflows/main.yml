@@ -39,14 +39,6 @@ jobs:
             npm install --legacy-peer-deps --force
           fi
 
-      - name: Fix Autolinking for New Architecture
-        run: |
-          mkdir -p android/app/build/generated/autolinking
-          echo "{}" > android/app/build/generated/autolinking/autolinking.json
-          # Also create in the location Gradle expects if different
-          mkdir -p android/build/generated/autolinking
-          echo "{}" > android/build/generated/autolinking/autolinking.json
-
       - name: Grant execute permission for gradlew
         run: chmod +x android/gradlew
 
