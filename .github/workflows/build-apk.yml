@@ -14,7 +14,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24' # Updated to 24 for environment consistency
+          node-version: '22' # Fixed to 22 for stability
 
       - name: Setup Java (Required for React Native)
         uses: actions/setup-java@v4
