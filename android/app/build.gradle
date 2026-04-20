@@ -75,3 +75,10 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+// Disable the New Architecture autolinking task that is failing
+tasks.whenTaskAdded { task ->
+    if (task.name == "generateAutolinkingNewArchitectureFiles") {
+        task.enabled = false
+    }
+}
