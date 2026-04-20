@@ -1,20 +1,19 @@
 apply plugin: 'com.android.application'
 
-
 android {
     namespace "com.forge"
-    compileSdk 34
+    compileSdk 36 // Fixed: Matched to project version
 
     defaultConfig {
         applicationId "com.forge"
         minSdk 24
-        targetSdk 34
+        targetSdk 36 // Fixed: Matched to project version
         versionCode 1
         versionName "1.0"
     }
     signingConfigs {
-                release {
-            if (System.getenv('STORE_PASSWORD') != null) {
+        release {
+           if (System.getenv('STORE_PASSWORD') != null) {
                 storeFile file(System.getenv('KEYSTORE_FILE') ?: "debug.keystore")
                 storePassword System.getenv('STORE_PASSWORD')
                 keyAlias System.getenv('KEY_ALIAS')
@@ -31,4 +30,4 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-} 
+}
