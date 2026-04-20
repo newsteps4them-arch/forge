@@ -1,22 +1,30 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.facebook.react'
 
+react {
+    /* No extra config needed for now */
+}
+
+
 android {
     namespace "com.forge"
-    compileSdk 36
+    compileSdk 34
+
 
     defaultConfig {
         applicationId "com.forge"
         minSdk 24
-        targetSdk 36
+        targetSdk 34
         versionCode 1
         versionName "1.0"
     }
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
 
     signingConfigs {
         release {
@@ -31,6 +39,7 @@ android {
         }
     }
 
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
@@ -39,6 +48,7 @@ android {
         }
     }
 }
+
 
 // Force all libraries to match your project's versioning
 configurations.all {
@@ -49,6 +59,7 @@ configurations.all {
     }
 }
 
+
 subprojects {
     afterEvaluate { project ->
         if (project.hasProperty('android')) {
@@ -58,5 +69,18 @@ subprojects {
                 }
             }
         }
+    }
+}
+
+
+
+dependencies {
+    // The version of react-native is set by the react-native-gradle-plugin
+    implementation("com.facebook.react:react-android")
+
+    if (hermesEnabled.toBoolean()) {
+        implementation("com.facebook.react:hermes-android")
+    } else {
+        implementation jscFlavor
     }
 }
