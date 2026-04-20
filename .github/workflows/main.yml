@@ -29,16 +29,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Using 20 for stability with current RN version
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
         run: |
           npm install --legacy-peer-deps
-          # If npm install fails, try to fix common RN issues
           if [ $? -ne 0 ]; then
             npm install --legacy-peer-deps --force
           fi
+
+      - name: Fix Autolinking for New Architecture
+        run: |
+          mkdir -p android/app/build/generated/autolinking
+          echo "{}" > android/app/build/generated/autolinking/autolinking.json
+          # Also create in the location Gradle expects if different
+          mkdir -p android/build/generated/autolinking
+          echo "{}" > android/build/generated/autolinking/autolinking.json
 
       - name: Grant execute permission for gradlew
         run: chmod +x android/gradlew
@@ -52,7 +59,6 @@ jobs:
         run: |
           cd android
           if [ "${{ github.event.inputs.build_type }}" == "release" ]; then
-            # Only attempt release build if secrets are present
             if [ -n "$STORE_PASSWORD" ]; then
               ./gradlew assembleRelease
             else
