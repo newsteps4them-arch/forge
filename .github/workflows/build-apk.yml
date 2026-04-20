@@ -2,7 +2,7 @@ name: Build Forge APK
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: # Allows you to manually trigger a build anytime
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,9 +14,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22' # Fixed to 22 for stability
+          node-version: '22'
 
-      - name: Setup Java (Required for React Native)
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
@@ -29,7 +29,10 @@ jobs:
         run: chmod +x android/gradlew
 
       - name: Build Android APK
-        run: npm run build:android
+        run: |
+          cd android
+          ./gradlew clean
+          ./gradlew assembleDebug
 
       - name: Upload Finished APK
         uses: actions/upload-artifact@v4
