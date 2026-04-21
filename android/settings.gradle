@@ -1,11 +1,29 @@
 rootProject.name = 'forge'
-
-// This is the "Old Reliable" way to link your libraries
-// It manually finds the linking script in your node_modules
-apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); 
-applyNativeModulesSettingsGradle(settings)
-
 include ':app'
 
-// This still keeps the new Gradle plugin available if the app needs it
+// --- MANUAL MAP FOR THE 7 BROKEN LIBRARIES ---
+// This tells the computer exactly where the "engines" for your libraries are located.
+
+include ':react-native-async-storage_async-storage'
+project(':react-native-async-storage_async-storage').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-async-storage/async-storage/android')
+
+include ':react-native-gesture-handler'
+project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
+
+include ':react-native-reanimated'
+project(':react-native-reanimated').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-reanimated/android')
+
+include ':react-native-safe-area-context'
+project(':react-native-safe-area-context').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-safe-area-context/android')
+
+include ':react-native-screens'
+project(':react-native-screens').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-screens/android')
+
+include ':react-native-worklets'
+project(':react-native-worklets').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-worklets-core/android')
+
+include ':react-native-vector-icons_material-design-icons'
+project(':react-native-vector-icons_material-design-icons').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-vector-icons/material-design-icons/android')
+
+// This loads the core React Native engine
 includeBuild('../node_modules/@react-native/gradle-plugin')
