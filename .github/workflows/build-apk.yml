@@ -1,4 +1,4 @@
-name: Forge Super-Build
+name: Forge Ultimate Super-Build
 on: [push]
 
 jobs:
@@ -19,19 +19,20 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Install & Lint
+      - name: Install & Self-Correct
+        # This fixes grammar/style errors before building
         run: |
-          npm install
-          # This checks the code for errors before building
+          npm install --legacy-peer-deps
           npx eslint . --fix || true 
 
-      - name: Build Android APK
+      - name: Build Android APK (API 36)
         env:
           CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          # 'clean' is critical to wipe away old failed build data
+          ./gradlew clean assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
