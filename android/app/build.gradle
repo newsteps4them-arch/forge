@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.facebook.react'
 
+/**
+ * Forge App - 2026 Master Build
+ */
+react {
+    // This is the correct place for 'WithApp'
+    autolinkLibrariesWithApp()
+}
+
 android {
     ndkVersion "27.0.12077973"
     compileSdk 36
@@ -28,14 +36,13 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.debug 
             minifyEnabled false
         }
     }
 }
 
 dependencies {
-    // ONLY this line is needed. 
-    // Autolinking will automatically find Worklets, Reanimated, Gesture Handler, etc.
+    // The engine handles the rest automatically now
     implementation("com.facebook.react:react-android")
 }
