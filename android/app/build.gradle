@@ -1,20 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.facebook.react'
 
-/**
- * Forge App - API 36 Compatibility Update
- */
-react {
-    // Standard configuration
-}
-
-def enableProguardInReleaseBuilds = false
-def jscFlavor = 'org.webkit:android-jsc:+'
-
 android {
     ndkVersion "27.0.12077973"
     
-    // BUMPED TO 36: To satisfy the core-ktx 1.17.0 requirement
+    // API 36 is the mandatory 2026 standard
     compileSdk 36
     namespace "com.forge"
 
@@ -33,16 +23,6 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
-        release {
-            if (System.getenv('STORE_PASSWORD') != null) {
-                storeFile file(System.getenv('KEYSTORE_FILE') ?: "debug.keystore")
-                storePassword System.getenv('STORE_PASSWORD')
-                keyAlias System.getenv('KEY_ALIAS')
-                keyPassword System.getenv('KEY_PASSWORD')
-            } else {
-                initWith signingConfigs.debug
-            }
-        }
     }
 
     buildTypes {
@@ -50,29 +30,13 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            signingConfig signingConfigs.release
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.debug // Using debug for now to avoid key errors
+            minifyEnabled false
         }
     }
 }
 
 dependencies {
-    // Main engine
+    // The engine handles the rest through autolinking
     implementation("com.facebook.react:react-android")
-
-    // Keeping the brute-force links from our last successful step
-    implementation project(':react-native-async-storage_async-storage')
-    implementation project(':react-native-gesture-handler')
-    implementation project(':react-native-reanimated')
-    implementation project(':react-native-safe-area-context')
-    implementation project(':react-native-screens')
-    implementation project(':react-native-worklets')
-    implementation project(':react-native-vector-icons_material-design-icons')
-
-    if (hermesEnabled.toBoolean()) {
-        implementation("com.facebook.react:hermes-android")
-    } else {
-        implementation jscFlavor
-    }
 }
