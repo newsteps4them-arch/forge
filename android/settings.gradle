@@ -1,20 +1,17 @@
-// 1. Tell Gradle where the tools are
 pluginManagement {
+    // 1. Give Gradle a direct map to the tools
     includeBuild("../node_modules/@react-native/gradle-plugin")
 }
 
-// 2. Load the React Native plugin
 plugins {
+    // 2. Load the React Native settings plugin
     id("com.facebook.react.settings")
 }
 
-// 3. Set the project name FIRST
+// 3. THE FIX: We grab the extension by name and call the exact command
+// This bypasses the "Method Not Found" error on the 'forge' settings object.
+def reactSettings = extensions.getByName("react")
+reactSettings.autolinkLibrariesFromCommand()
+
 rootProject.name = 'forge'
-
-// 4. THE FIX: In 2026, the method is just 'autolink()'
-// This handles all your libraries (Reanimated, Worklets, etc.)
-extensions.configure(com.facebook.react.ReactSettingsExtension) {
-    autolink() 
-}
-
 include ':app'
