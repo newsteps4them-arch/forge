@@ -1,14 +1,11 @@
 pluginManagement {
-    // This tells Gradle where to find the React tools before it starts
     includeBuild("../node_modules/@react-native/gradle-plugin")
 }
 
 plugins {
-    // This is the line that was failing—it now has the map above it
     id("com.facebook.react.settings")
 }
 
-// This handles the automatic linking for your 7 libraries
 extensions.configure(com.facebook.react.ReactSettingsExtension) {
     autolinkLibrariesWithApp()
 }
