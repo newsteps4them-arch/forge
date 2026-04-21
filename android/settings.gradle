@@ -1,19 +1,17 @@
 pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
+    // This tells Gradle to find the React plugin inside your project folder
+    includeBuild("../node_modules/@react-native/gradle-plugin")
 }
 
 plugins {
+    // This is the line that was failing; now it knows where to look
     id("com.facebook.react.settings")
-}
-
-extensions.configure(com.facebook.react.ReactSettingsExtension) {
-    autolinkLibrariesWithApp()
 }
 
 rootProject.name = 'forge'
 include ':app'
-includeBuild('../node_modules/@react-native/gradle-plugin')
+
+// This makes sure all your libraries (like Reanimated) are automatically found
+extensions.configure(com.facebook.react.ReactSettingsExtension) {
+    autolinkLibrariesWithApp()
+}
