@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.facebook.react'
 
 /**
- * Forge App Build Configuration
+ * Forge App - API 36 Compatibility Update
  */
 react {
-    // Standard React Native configuration
+    // Standard configuration
 }
 
 def enableProguardInReleaseBuilds = false
@@ -13,15 +13,15 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
     ndkVersion "27.0.12077973"
-    // Bumping to 35 to stop the "version ignored" warnings in your logs
-    buildToolsVersion "35.0.0"
-    compileSdk 35
+    
+    // BUMPED TO 36: To satisfy the core-ktx 1.17.0 requirement
+    compileSdk 36
     namespace "com.forge"
 
     defaultConfig {
         applicationId "com.forge"
         minSdk 24
-        targetSdk 35
+        targetSdk 36
         versionCode 1
         versionName "1.0"
     }
@@ -58,10 +58,10 @@ android {
 }
 
 dependencies {
-    // The main React Native dependency
+    // Main engine
     implementation("com.facebook.react:react-android")
 
-    // BRUTE-FORCE FIX: Manually linking the 7 libraries that were failing
+    // Keeping the brute-force links from our last successful step
     implementation project(':react-native-async-storage_async-storage')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-reanimated')
