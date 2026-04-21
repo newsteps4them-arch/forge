@@ -1,5 +1,5 @@
 pluginManagement {
-    // This tells Gradle where to find the React tools before it even starts
+    // This gives the cloud build the map to your React tools
     includeBuild("../node_modules/@react-native/gradle-plugin")
 }
 
@@ -7,7 +7,7 @@ plugins {
     id("com.facebook.react.settings")
 }
 
-// THIS IS THE FIX: Using the correct 'FromCommand' method for Settings
+// THE FIX: Settings uses 'FromCommand'
 extensions.configure(com.facebook.react.ReactSettingsExtension) {
     autolinkLibrariesFromCommand()
 }
