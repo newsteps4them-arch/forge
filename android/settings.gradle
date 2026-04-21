@@ -1,16 +1,20 @@
+// 1. Tell Gradle where the tools are
 pluginManagement {
-    // This gives the cloud build the map to your React tools
     includeBuild("../node_modules/@react-native/gradle-plugin")
 }
 
+// 2. Load the React Native plugin
 plugins {
     id("com.facebook.react.settings")
 }
 
-// THE FIX: Settings uses 'FromCommand'
+// 3. Set the project name FIRST
+rootProject.name = 'forge'
+
+// 4. THE FIX: In 2026, the method is just 'autolink()'
+// This handles all your libraries (Reanimated, Worklets, etc.)
 extensions.configure(com.facebook.react.ReactSettingsExtension) {
-    autolinkLibrariesFromCommand()
+    autolink() 
 }
 
-rootProject.name = 'forge'
 include ':app'
