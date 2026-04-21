@@ -2,17 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.facebook.react'
 
 /**
- * Forge App - 2026 Production Build
+ * Forge App - 2026 Master Build
  */
 react {
-    // THE FIX: App uses 'WithApp'
+    // This tells the app to accept the libraries found in settings.gradle
     autolinkLibrariesWithApp()
 }
 
 android {
     ndkVersion "27.0.12077973"
-    
-    // Satisfying the mandatory 2026 requirement for core-ktx 1.17.0
     compileSdk 36
     namespace "com.forge"
 
@@ -38,14 +36,13 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            // Using debug keys for now to ensure a successful build without key setup
-            signingConfig signingConfigs.debug 
+            signingConfig signingConfigs.debug
             minifyEnabled false
         }
     }
 }
 
 dependencies {
-    // The engine handles autolinking automatically via the 'react' block above
+    // The main React Native engine (includes everything else automatically)
     implementation("com.facebook.react:react-android")
 }
