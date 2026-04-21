@@ -1,21 +1,15 @@
 pluginManagement {
-    // This gives Gradle a direct map to the React Native tools
+    // This tells Gradle where to find the React tools before it even starts
     includeBuild("../node_modules/@react-native/gradle-plugin")
 }
 
 plugins {
-    // We apply the plugin here...
     id("com.facebook.react.settings")
 }
 
-// --- THE JIMMYRIG ---
-// Instead of using the fancy "extensions.configure" block that keeps failing, 
-// we use a "Safe Check" that waits for the plugin to be ready.
-if (settings.hasProperty("reactSettings")) {
-    reactSettings.autolinkLibrariesWithApp()
-} else {
-    // This is the fallback if the property is shy
-    extensions.getByName("react").autolinkLibrariesWithApp()
+// THIS IS THE FIX: Using the correct 'FromCommand' method for Settings
+extensions.configure(com.facebook.react.ReactSettingsExtension) {
+    autolinkLibrariesFromCommand()
 }
 
 rootProject.name = 'forge'
