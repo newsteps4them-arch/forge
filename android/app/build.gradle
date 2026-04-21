@@ -3,8 +3,6 @@ apply plugin: 'com.facebook.react'
 
 android {
     ndkVersion "27.0.12077973"
-    
-    // API 36 is the mandatory 2026 standard
     compileSdk 36
     namespace "com.forge"
 
@@ -30,13 +28,14 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            signingConfig signingConfigs.debug // Using debug for now to avoid key errors
+            signingConfig signingConfigs.debug
             minifyEnabled false
         }
     }
 }
 
 dependencies {
-    // The engine handles the rest through autolinking
+    // ONLY this line is needed. 
+    // Autolinking will automatically find Worklets, Reanimated, Gesture Handler, etc.
     implementation("com.facebook.react:react-android")
 }
