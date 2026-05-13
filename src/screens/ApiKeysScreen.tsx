@@ -34,7 +34,7 @@ export default function ApiKeysScreen({ navigation, route }: any) {
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [fadeAnim, slideAnim]);
 
   const toggleFaq = () => {
     setShowFaq(prev => !prev);

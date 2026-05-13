@@ -39,7 +39,7 @@ export default function VehiclesScreen({ navigation, route }: any) {
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [fadeAnim, slideAnim]);
 
   const updateVehicle = (id: string, field: keyof Vehicle, value: string) => {
     setVehicles(prev =>

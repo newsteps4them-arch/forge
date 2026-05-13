@@ -36,7 +36,7 @@ export default function AboutYouScreen({ navigation, route }: any) {
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [fadeAnim, slideAnim]);
 
   const toggleRole = (id: string) => {
     setSelected(prev =>

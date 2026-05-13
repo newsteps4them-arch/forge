@@ -37,7 +37,7 @@ export default function WelcomeScreen({ navigation }: any) {
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [fadeAnim, slideAnim, buttonAnim]);
 
   return (
     <View style={styles.container}>

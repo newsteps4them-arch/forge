@@ -43,7 +43,7 @@ export default function ReadyScreen({ navigation, route }: any) {
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [fadeAnim, scaleAnim, sparkAnim, buttonAnim]);
 
   const handleLetsGo = async () => {
     try {

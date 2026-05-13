@@ -30,7 +30,7 @@ export default function NameAssistantScreen({ navigation }: any) {
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [fadeAnim, slideAnim]);
 
   return (
     <KeyboardAvoidingView

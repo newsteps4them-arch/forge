@@ -48,7 +48,7 @@ export default function WakeWordScreen({ navigation, route }: any) {
         }),
       ])
     ).start();
-  }, []);
+  }, [fadeAnim, slideAnim, pulseAnim]);
 
   return (
     <KeyboardAvoidingView
