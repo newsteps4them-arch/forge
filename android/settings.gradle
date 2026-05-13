@@ -10,8 +10,8 @@ plugins {
 
 // 3. THE FIX: We grab the extension by name and call the exact command
 // This bypasses the "Method Not Found" error on the 'forge' settings object.
-def reactSettings = extensions.getByName("react")
-reactSettings.autolinkLibrariesFromCommand()
+def reactSettingsExt = extensions.getByName("reactSettings")
+reactSettingsExt.autolinkLibrariesFromCommand()
 
 rootProject.name = 'forge'
 include ':app'
